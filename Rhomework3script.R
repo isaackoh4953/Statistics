@@ -6,7 +6,9 @@ leastsquare <- function(X,y){
   B<- inv(t(X)%*%X) %*% t(X) %*% y
   return(B)
 }
-leastsquare(X,y)  
+leastsquare(cbind(1,X),y) ### This is to Estimate Beta
+
+
 ### This function is to create the Covariance Matrix ###
 Covariance <- function(X,y){
   n <- nrow(X)
@@ -15,14 +17,11 @@ Covariance <- function(X,y){
   Cov <- sigma * solve(t(X) %*% X)
   return(Cov)
 }  
-length(X[1,])
-Covariance(X,y) 
 
-sqrt(diag(Covariance(X,y))) #If you want to find the standard error  
-tstatistics(X,y)
-  
-A <- matrix(1:4,2)
-b<- c(5,6)
+sqrt(diag(Covariance(cbind(1,X),y))) #If you want to find the standard error  
+
+
+### This function is to find the t statistics ###
 
 tstatistics <- function(X,y){
   n <- length(X[1,])
@@ -37,7 +36,9 @@ tstatistics <- function(X,y){
 return(a)  
 }
 
-ncol(X)
+tstatistics(cbind(1,X),y)
+
+## A short function to find the degree of freedom ##
 
 degreeoffreedom <- function(x,y){
   n <- nrow(X)
@@ -46,6 +47,8 @@ degreeoffreedom <- function(x,y){
 }
 degreeoffreedom(X,y)
 
+
+## Function is to find the pvalue ##
 
 pvalue <- function(X,y){
   a <- tstatistics(X,y)
@@ -59,7 +62,10 @@ pvalue <- function(X,y){
   return(b)
 }
 
-pvalue(X,y)
+pvalue(cbind(1,X),y) ### Test to find the pvalue ###
+
+
+## Below is test data for my function, verify if it works ##
 
 n = 200
 p = 5
@@ -72,5 +78,3 @@ names(df) = c("y",paste("X", 1:5, sep=""))
 fit = lm(y~., data = df) # you should use your own code to replace lm()
 summary(fit)
 beta #you may compare your estimate with the true beta
-
-t.test(beta,y = NULL, alternative = c("two.sided"), conf.level = 0.95,)
